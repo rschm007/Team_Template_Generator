@@ -1,0 +1,38 @@
+//- mixin for teammember data insertion
+mixin teamMember(memberData)
+    .flex-initial(class='card employee-card')
+        .flex-1.card-header
+            h2.card-title
+            h3.card-title
+                i(class="{{ role-icon }}") {{ role }}
+        .card-body(class='col-12 d-flex justify-content-center')
+            ul.list-group
+                li.list-group-item 
+                    p ID: {{ id }}
+                li.list-group-item
+                    a(href='mailto: ${{ email }}'){{ email }}
+                li.list-group-item
+                    p GitHub: 
+                        a(href='{{ github }}' target="_blank" rel="noopener noreferrer"){{ github }}
+
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible" content="ie=edge")
+        title My Team
+        //- tailwindcss
+        link(href='../Assets/styles/tailwind.css' rel='stylesheet')
+        //- local css
+        link(href='../Assets/styles/styles.css' rel='stylesheet')
+        //- jquery
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    body
+        //- header
+        .flex
+            header.flex-1(class='justify-center text-white mx-4 my-2')
+                h1(class='text-center bg-pink-600 px-5 py-3 rounded-lg') My Team
+        //- area where employee cards will be inserted
+        main.flex
+            .flex-1.team-area
