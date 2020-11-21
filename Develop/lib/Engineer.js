@@ -3,18 +3,16 @@ const Employee = require("./Employee");
 
 class Engineer extends Employee {
   constructor(name, id, email, github) {
-    super(name, id, email, github)
-    if (!github) {
-      throw new Error("You are missing the GitHub address.");
-    }
+    super(name, id, email)
+
     this.github = github;
   }
   //   method that returns the value of the github account
   getGithub() {
-    console.log(`GitHub: ${this.github}`);
+    return this.github;
   }
   getRole() {
-    console.log(`Role: Engineer`);
+    return 'Engineer';
   }
 }
 

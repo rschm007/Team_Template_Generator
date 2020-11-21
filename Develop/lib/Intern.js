@@ -3,18 +3,16 @@ const Employee = require("./Employee");
 
 class Intern extends Employee {
   constructor(name, id, email, school) {
-    super(name, id, email, school);
-    if (!school) {
-      throw new Error("You are missing the GitHub address.");
-    }
+    super(name, id, email);
+    
     this.school = school;
   }
   //   method that returns the value of the github account
-  getGithub() {
-    console.log(`School: ${this.school}`);
+  getSchool() {
+    return this.school;
   }
   getRole() {
-    console.log(`Role: Intern`);
+    return 'Intern';
   }
 }
 
