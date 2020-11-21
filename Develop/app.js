@@ -12,10 +12,6 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const { Input } = require("postcss");
-
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
 
 // define an empty array to hold employees
 let employeesArr = [];
@@ -76,72 +72,111 @@ function initialize() {
   ]);
 }
 
-// ask if the manager would like to add an employee or just create the HTML page
-// function adminQ() {
-//   return inquirer.prompt([
-//     {
-//       type: "list",
-//       message: "Would you like to:",
-//       name: "adminResp",
-//       choices: [
-//         { name: "Add an employee to your team?", value: 0 },
-//         { name: "Create the team page?", value: 1 },
-//       ],
-//     },
-//   ]);
-// }
-
 function buildEmployee() {
   inquirer
     .prompt([
+      // ask the admin if they'd like to an employee. If yes, go through inquirer prompt. If no, render HTML
+      {
+        type: "confirm",
+        message: "Are you sure you'd like to add an employee?",
+        name: "employeeConfirm",
+      },
       {
         type: "list",
         message: "What type of employee do you want to add?",
         name: "role",
-        choices: [
-          "Engineer",
-          "Intern",
-          "I am done adding team members",
-        ],
+        choices: ["Engineer", "Intern"],
       },
     ])
     .then((answer) => {
-      //logic that catches answer and translates it into role data
-      if (answer.role === "Engineer") {
-        // engineer role logic
-        return inquirer
-          .prompt([questions[0], questions[1], questions[2], questions[3]])
-          .then((answers) => {
-            let engineer = new Engineer(
-              answers.name,
-              answers.id,
-              answers.email,
-              answers.github
-            ); //create a new Engineer class with the engineer constructor
-            employeesArr.push(engineer); // push that new employee object into the employeesArr for later concatenation
-            console.log(`Success! Engineer ${answers.name} information saved.`);
-            buildEmployee(); // call the buildEmployee array again
-          });
-      }
-      if (answer.role === "Intern") {
-        //intern role logic
-        return inquirer
-          .prompt([questions[0], questions[1], questions[2], questions[4]])
-          .then((answers) => {
-            let intern = new Intern(
-              answers.name,
-              answers.id,
-              answers.email,
-              answers.school
-            ); //create a new Intern class with the Intern constructor
-            employeesArr.push(intern); // push that new employee object into the employeesArr for later concatenation
-            console.log(`Success! Intern ${answers.name} information saved.`);
-            buildEmployee(); // call the buildEmployee array again
-          });
+      if (answer.employeeConfirm === true) {
+        //logic that catches answer and translates it into role data
+        if (answer.role === "Engineer") {
+          // engineer role logic
+          return inquirer
+            .prompt([questions[0], questions[1], questions[2], questions[3]])
+            .then((answers) => {
+              let engineer = new Engineer(
+                answers.name,
+                answers.id,
+                answers.email,
+                answers.github
+              ); //create a new Engineer class with the engineer constructor
+              employeesArr.push(engineer); // push that new employee object into the employeesArr for later concatenation
+              console.log(
+                `Success! Engineer ${answers.name} information saved.`
+              );
+              buildEmployee(); // call the buildEmployee array again
+            });
+        }
+        if (answer.role === "Intern") {
+          //intern role logic
+          return inquirer
+            .prompt([questions[0], questions[1], questions[2], questions[4]])
+            .then((answers) => {
+              let intern = new Intern(
+                answers.name,
+                answers.id,
+                answers.email,
+                answers.school
+              ); // create a new Intern class with the Intern constructor
+              employeesArr.push(intern); // push that new employee object into the employeesArr for later concatenation
+              console.log(`Success! Intern ${answers.name} information saved.`);
+              buildEmployee(); // call the buildEmployee array again
+            });
+        }
+      } else if (answer.employeeConfirm === false) {
+        // ****************************
+        // RENDER HTML
+        // ****************************
+        // capture the main.html path
+        let main = fs.readFileSync("./html/main.html");
+
+        // create a function that will replace information in cards
+        let managerCard = fs.readFileSync("./html/manager.html");
+        managerCard.replace("{{ name }}", manager.getName())
+          .replace("{{ role }}", manager.getRole())
+          .replace("{{ id }}", manager.getId())
+          .replace("{{ email }}", manager.getEmail())
+          .replace("{{ officeNumber }}", manager.getOfficeNumber());
+
+        // append page with teammember info
+        let teamCards = managerCard;
+        // make a loop that will go through all contents of employeesArr and append info into relevant cards
+        employeesArr.forEach(function (member, index) {
+          teamCards += renderMember(member[index]);
+        });
+
+        // add cards to main.html
+        main = main.replace("{{ cards }}", teamCards);
+
+        console.log("Success! HTML has been created.");
       }
     });
 }
 
+// define a renderMember function that will insert each employee's info into cards
+function renderMember(member) {
+  if (member.getRole() === "Intern") {
+    let internCard = fs.readFileSync("./html/intern.html");
+    internCard = internCard
+      .replace("{{ name }}", member.getName())
+      .replace("{{ role }}", member.getRole())
+      .replace("{{ id }}", member.getId())
+      .replace("{{ email }}", member.getEmail())
+      .replace("{{ school }}", member.getSchool());
+    return internCard;
+  } else {
+    let engiCard = fs.readFileSync("./html/engineer.html");
+    engiCard = engiCard
+      .replace("{{ name }}", member.getName())
+      .replace("{{ role }}", member.getRole())
+      .replace("{{ id }}", member.getId())
+      .replace("{{ email }}", member.getEmail())
+      .replace("{{ github }}", member.getGithub());
+    return engiCard;
+  }
+}
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
@@ -177,14 +212,4 @@ initialize().then((answers) => {
   console.log(`Success! Manager ${answers.name} information saved.`);
   console.log(`Beginning employee data entry...`);
   buildEmployee();
-  // adminQ().then((response) => {
-  //   // ask if they'd like to build a new employee or render the HTML
-  //   if (response.choices = 0) {
-  //     console.log("beginning employee build...");
-  //     buildEmployee();
-  //   } else {
-  //     console.log("rendering...");
-  //     render();
-  //   }
-  // });
 });
