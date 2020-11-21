@@ -72,16 +72,19 @@ function initialize() {
 }
 
 // ask if the manager would like to add an employee or just create the HTML page
-function adminQ() {
-  inquirer.prompt([
-    {
-      type: "list",
-      message: "Would you like to:",
-      name: "adminResp",
-      choices: ["Add an employee to your team?", "Create the team page?"],
-    },
-  ]);
-}
+// function adminQ() {
+//   return inquirer.prompt([
+//     {
+//       type: "list",
+//       message: "Would you like to:",
+//       name: "adminResp",
+//       choices: [
+//         { name: "Add an employee to your team?", value: 0 },
+//         { name: "Create the team page?", value: 1 },
+//       ],
+//     },
+//   ]);
+// }
 
 function buildEmployee() {
   inquirer
@@ -105,6 +108,21 @@ function buildEmployee() {
     ])
     .then((answer) => {
       //logic that catches answer and translates it into role data
+      if (answer.role === "Employee") {
+        // engineer role logic
+        inquirer
+          .prompt([questions["id"], questions["email"]])
+          .then((answers) => {
+            let employee = new Employee(
+              answers.name,
+              answers.id,
+              answers.email
+            ); //create a new Employee class with the Employee constructor
+            employeesArr.push(employee); // push that new employee object into the employeesArr for later concatenation
+            console.log(`Success! Employee ${answers.name} information saved.`);
+            buildEmployee(); // call the buildEmployee array again
+          });
+      }
       if (answer.role === "Engineer") {
         // engineer role logic
         inquirer
@@ -117,6 +135,7 @@ function buildEmployee() {
               answers.github
             ); //create a new Engineer class with the engineer constructor
             employeesArr.push(engineer); // push that new employee object into the employeesArr for later concatenation
+            console.log(`Success! Engineer ${answers.name} information saved.`);
             buildEmployee(); // call the buildEmployee array again
           });
       }
@@ -132,14 +151,12 @@ function buildEmployee() {
               answers.school
             ); //create a new Intern class with the Intern constructor
             employeesArr.push(intern); // push that new employee object into the employeesArr for later concatenation
+            console.log(`Success! Intern ${answers.name} information saved.`);
             buildEmployee(); // call the buildEmployee array again
           });
       }
     });
 }
-
-// call the initialize function to begin questions for admin
-initialize();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -166,17 +183,24 @@ initialize();
 // ****************************
 initialize().then((answers) => {
   // build a new manager object with answers
-  const manager = new Manager(
+  let manager = new Manager(
     answers.name,
     answers.id,
     answers.email,
     answers.officeNumber
   );
   employeesArr.push(manager); // push that new employee object into the employeesArr for later concatenation
-  adminQ().then((answers) => { // ask if they'd like to build a new employee or render the HTML
-    if (answers === 'Add an employee to your team?') {
-      buildEmployee();
-    }
-      render();
-  });  
+  console.log(`Success! Manager ${answers.name} information saved.`);
+  console.log(`Beginning employee data entry...`);
+  buildEmployee();
+  // adminQ().then((response) => {
+  //   // ask if they'd like to build a new employee or render the HTML
+  //   if (response.choices = 0) {
+  //     console.log("beginning employee build...");
+  //     buildEmployee();
+  //   } else {
+  //     console.log("rendering...");
+  //     render();
+  //   }
+  // });
 });

@@ -2,7 +2,8 @@
 const Employee = require("./Employee");
 
 class Manager extends Employee {
-  constructor(officeNumber) {
+  constructor(name, id, email, officeNumber) {
+    super(name, id, email, officeNumber);
     if (!officeNumber) {
       throw new Error("You are missing the Office Number.");
     }
@@ -18,4 +19,4 @@ class Manager extends Employee {
 }
 
 // export this class
-module.exports = Manager
+module.exports = Manager;

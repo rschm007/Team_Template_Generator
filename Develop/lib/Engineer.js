@@ -2,7 +2,8 @@
 const Employee = require("./Employee");
 
 class Engineer extends Employee {
-  constructor(github) {
+  constructor(name, id, email, github) {
+    super(name, id, email, github)
     if (!github) {
       throw new Error("You are missing the GitHub address.");
     }
