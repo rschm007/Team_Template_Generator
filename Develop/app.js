@@ -24,6 +24,11 @@ let employeesArr = [];
 const questions = [
   {
     type: "input",
+    message: "What is the employee's name?",
+    name: "name",
+  },
+  {
+    type: "input",
     message: "What is the employee's ID number?",
     name: "id",
   },
@@ -90,43 +95,22 @@ function buildEmployee() {
   inquirer
     .prompt([
       {
-        type: "input",
-        message: "What is the employee's name?",
-        name: "name",
-      },
-      {
         type: "list",
-        message: "What is the employee's role?",
+        message: "What type of employee do you want to add?",
         name: "role",
         choices: [
           "Engineer",
           "Intern",
-          "Employee",
           "I am done adding team members",
         ],
       },
     ])
     .then((answer) => {
       //logic that catches answer and translates it into role data
-      if (answer.role === "Employee") {
-        // engineer role logic
-        inquirer
-          .prompt([questions["id"], questions["email"]])
-          .then((answers) => {
-            let employee = new Employee(
-              answers.name,
-              answers.id,
-              answers.email
-            ); //create a new Employee class with the Employee constructor
-            employeesArr.push(employee); // push that new employee object into the employeesArr for later concatenation
-            console.log(`Success! Employee ${answers.name} information saved.`);
-            buildEmployee(); // call the buildEmployee array again
-          });
-      }
       if (answer.role === "Engineer") {
         // engineer role logic
-        inquirer
-          .prompt([questions["id"], questions["email"], questions["github"]])
+        return inquirer
+          .prompt([questions[0], questions[1], questions[2], questions[3]])
           .then((answers) => {
             let engineer = new Engineer(
               answers.name,
@@ -139,10 +123,10 @@ function buildEmployee() {
             buildEmployee(); // call the buildEmployee array again
           });
       }
-      if (answer.role === "Engineer") {
+      if (answer.role === "Intern") {
         //intern role logic
-        inquirer
-          .prompt([questions["id"], questions["email"], questions["school"]])
+        return inquirer
+          .prompt([questions[0], questions[1], questions[2], questions[4]])
           .then((answers) => {
             let intern = new Intern(
               answers.name,
