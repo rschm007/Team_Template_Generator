@@ -14,9 +14,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 // define an empty array to hold employees
-let employeesArr = [];
-// define an array to hold manager info - should be empty and changeable
-let manager;
+const employeesArr = [];
 
 // define questions that will be used throughout
 const questions = [
@@ -118,8 +116,9 @@ function buildEmployee() {
                   employeesArr.push(engineer); // push that new employee object into the employeesArr for later concatenation
                   console.log(
                     `Success! Engineer ${answers.name} information saved.`
-                  );
-                  buildEmployee(); // call the buildEmployee array again
+                  )
+                  console.log(`current team:  ${JSON.stringify(employeesArr)}`)
+                  buildEmployee(); // call the buildEmployee function again
                 });
             }
             if (answer.role === "Intern") {
@@ -141,8 +140,9 @@ function buildEmployee() {
                   employeesArr.push(intern); // push that new employee object into the employeesArr for later concatenation
                   console.log(
                     `Success! Intern ${answers.name} information saved.`
-                  );
-                  buildEmployee(); // call the buildEmployee array again
+                  )
+                  console.log(`current team:  ${JSON.stringify(employeesArr)}`)
+                  buildEmployee(); // call the buildEmployee function again
                 });
             }
           });
@@ -173,6 +173,7 @@ initialize().then((answers) => {
   );
   employeesArr.push(manager); // push that new employee object into the employeesArr for later concatenation
   console.log(`Success! Manager ${answers.name} information saved.`);
+  console.log(`current team:  ${JSON.stringify(employeesArr)}`)
   console.log(`Beginning employee data entry...`);
   buildEmployee();
 });
