@@ -73,7 +73,7 @@ function initialize() {
 }
 
 function buildEmployee() {
-  inquirer
+  return inquirer
     .prompt([
       // ask the admin if they'd like to an employee. If yes, go through inquirer prompt. If no, render HTML
       {
@@ -81,50 +81,69 @@ function buildEmployee() {
         message: "Are you sure you'd like to add an employee?",
         name: "employeeConfirm",
       },
-      {
-        type: "list",
-        message: "What type of employee do you want to add?",
-        name: "role",
-        choices: ["Engineer", "Intern"],
-      },
     ])
     .then((answer) => {
+      // if yes to employeeConfirm, go on to employee build logic
+      // ask what type of employee they'd like to add
       if (answer.employeeConfirm === true) {
-        //logic that catches answer and translates it into role data
-        if (answer.role === "Engineer") {
-          // engineer role logic
-          return inquirer
-            .prompt([questions[0], questions[1], questions[2], questions[3]])
-            .then((answers) => {
-              let engineer = new Engineer(
-                answers.name,
-                answers.id,
-                answers.email,
-                answers.github
-              ); //create a new Engineer class with the engineer constructor
-              employeesArr.push(engineer); // push that new employee object into the employeesArr for later concatenation
-              console.log(
-                `Success! Engineer ${answers.name} information saved.`
-              );
-              buildEmployee(); // call the buildEmployee array again
-            });
-        }
-        if (answer.role === "Intern") {
-          //intern role logic
-          return inquirer
-            .prompt([questions[0], questions[1], questions[2], questions[4]])
-            .then((answers) => {
-              let intern = new Intern(
-                answers.name,
-                answers.id,
-                answers.email,
-                answers.school
-              ); // create a new Intern class with the Intern constructor
-              employeesArr.push(intern); // push that new employee object into the employeesArr for later concatenation
-              console.log(`Success! Intern ${answers.name} information saved.`);
-              buildEmployee(); // call the buildEmployee array again
-            });
-        }
+        return inquirer
+          .prompt([
+            {
+              type: "list",
+              message: "What type of employee do you want to add?",
+              name: "role",
+              choices: ["Engineer", "Intern"],
+            },
+          ])
+          .then((answer) => {
+            //logic that catches answer and translates it into role data
+            if (answer.role === "Engineer") {
+              // engineer role logic
+              return inquirer
+                .prompt([
+                  questions[0],
+                  questions[1],
+                  questions[2],
+                  questions[3],
+                ])
+                .then((answers) => {
+                  let engineer = new Engineer(
+                    answers.name,
+                    answers.id,
+                    answers.email,
+                    answers.github
+                  ); //create a new Engineer class with the engineer constructor
+                  employeesArr.push(engineer); // push that new employee object into the employeesArr for later concatenation
+                  console.log(
+                    `Success! Engineer ${answers.name} information saved.`
+                  );
+                  buildEmployee(); // call the buildEmployee array again
+                });
+            }
+            if (answer.role === "Intern") {
+              //intern role logic
+              return inquirer
+                .prompt([
+                  questions[0],
+                  questions[1],
+                  questions[2],
+                  questions[4],
+                ])
+                .then((answers) => {
+                  let intern = new Intern(
+                    answers.name,
+                    answers.id,
+                    answers.email,
+                    answers.school
+                  ); // create a new Intern class with the Intern constructor
+                  employeesArr.push(intern); // push that new employee object into the employeesArr for later concatenation
+                  console.log(
+                    `Success! Intern ${answers.name} information saved.`
+                  );
+                  buildEmployee(); // call the buildEmployee array again
+                });
+            }
+          });
       } else if (answer.employeeConfirm === false) {
         // ****************************
         // RENDER HTML
@@ -134,7 +153,8 @@ function buildEmployee() {
 
         // create a function that will replace information in cards
         let managerCard = fs.readFileSync("./html/manager.html");
-        managerCard.replace("{{ name }}", manager.getName())
+        managerCard
+          .replace("{{ name }}", manager.getName())
           .replace("{{ role }}", manager.getRole())
           .replace("{{ id }}", manager.getId())
           .replace("{{ email }}", manager.getEmail())
