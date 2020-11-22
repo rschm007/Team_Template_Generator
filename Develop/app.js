@@ -1,4 +1,4 @@
-// teammember libs
+// teamemployee libs
 const Employee = require("./lib/Employee");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
@@ -15,6 +15,8 @@ const render = require("./lib/htmlRenderer");
 
 // define an empty array to hold employees
 let employeesArr = [];
+// define an array to hold manager info - should be empty and changeable
+let manager;
 
 // define questions that will be used throughout
 const questions = [
@@ -144,85 +146,26 @@ function buildEmployee() {
                 });
             }
           });
-      } else if (answer.employeeConfirm === false) {
+      } else {
         // ****************************
         // RENDER HTML
         // ****************************
-        // capture the main.html path
-        let main = fs.readFileSync("./html/main.html");
-
-        // create a function that will replace information in cards
-        let managerCard = fs.readFileSync("./html/manager.html");
-        managerCard
-          .replace("{{ name }}", manager.getName())
-          .replace("{{ role }}", manager.getRole())
-          .replace("{{ id }}", manager.getId())
-          .replace("{{ email }}", manager.getEmail())
-          .replace("{{ officeNumber }}", manager.getOfficeNumber());
-
-        // append page with teammember info
-        let teamCards = managerCard;
-        // make a loop that will go through all contents of employeesArr and append info into relevant cards
-        employeesArr.forEach(function (member, index) {
-          teamCards += renderMember(member[index]);
-        });
-
-        // add cards to main.html
-        main = main.replace("{{ cards }}", teamCards);
-
-        console.log("Success! HTML has been created.");
+        renderFile();
       }
     });
 }
 
-// define a renderMember function that will insert each employee's info into cards
-function renderMember(member) {
-  if (member.getRole() === "Intern") {
-    let internCard = fs.readFileSync("./html/intern.html");
-    internCard = internCard
-      .replace("{{ name }}", member.getName())
-      .replace("{{ role }}", member.getRole())
-      .replace("{{ id }}", member.getId())
-      .replace("{{ email }}", member.getEmail())
-      .replace("{{ school }}", member.getSchool());
-    return internCard;
-  } else {
-    let engiCard = fs.readFileSync("./html/engineer.html");
-    engiCard = engiCard
-      .replace("{{ name }}", member.getName())
-      .replace("{{ role }}", member.getRole())
-      .replace("{{ id }}", member.getId())
-      .replace("{{ email }}", member.getEmail())
-      .replace("{{ github }}", member.getGithub());
-    return engiCard;
-  }
+// define a function that takes the pre-provided functions in htmlRenderer.js and writes the output to the outputPath
+function renderFile() {
+  fs.writeFileSync(outputPath, render(employeesArr), "utf-8");
 }
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
 
 // ****************************
 // START OF APP FUNCTIONS
 // ****************************
 initialize().then((answers) => {
   // build a new manager object with answers
-  let manager = new Manager(
+  manager = new Manager(
     answers.name,
     answers.id,
     answers.email,
