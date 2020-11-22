@@ -6,6 +6,13 @@
 Check out the badges hosted by [shields.io](https://shields.io/).
 
 ---
+## Links
+---
+Repository <a href="https://github.com/rschm007/Team_Template_Generator">https://github.com/rschm007/Team_Template_Generator</a>
+
+Example Team Page: <a href="https://rschm007.github.io/Team_Template_Generator/Develop/output/team.html">https://rschm007.github.io/Team_Template_Generator/Develop/output/team.html</a>
+
+---
 ## Description
 ---
 A CLI application that prompts the user for information about the team manager and then the team members. After going through inquirer prompts (and passing the validation tests), the app will create a HTML file that dynamically inserts each team member's information into cards. The HTML page is mobile responsive thanks to Flexbox.
