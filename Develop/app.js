@@ -16,32 +16,61 @@ const render = require("./lib/htmlRenderer");
 // define an empty array to hold employees
 const employeesArr = [];
 
+// define a function for string validation
+const stringValidator = async (input) => {
+  if (typeof input !== "string" || input.length < 1) {
+    return "Name must be a valid word string";
+  }
+  return true;
+};
+// define a function for number validation
+const numValidator = async (input) => {
+  let inputNum = parseInt(input)
+  if (typeof(inputNum) == 'number') {
+    return true;
+  } else {
+    return "Must be a valid ID number";
+  }
+};
+// define a function for email validation
+function emailValidator(input) {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(input)) {
+    return true;
+  }
+  return "Must be a valid email address";
+};
+
 // define questions that will be used throughout
 const questions = [
   {
     type: "input",
     message: "What is the employee's name?",
     name: "name",
+    validate: stringValidator
   },
   {
     type: "input",
     message: "What is the employee's ID number?",
     name: "id",
+    validate: numValidator
   },
   {
     type: "input",
     message: "What is the employee's email address?",
     name: "email",
+    validate: emailValidator
   },
   {
     type: "input",
     message: "What is the employee's GitHub account?",
     name: "github",
+    validate: stringValidator
   },
   {
     type: "input",
     message: "What is the intern's school?",
     name: "school",
+    validate: stringValidator
   },
 ];
 
@@ -53,21 +82,25 @@ function initialize() {
       type: "input",
       message: "Welcome Admin. Please enter your name.",
       name: "name",
+      validate: stringValidator
     },
     {
       type: "input",
       message: "What is your ID?",
       name: "id",
+      validate: numValidator
     },
     {
       type: "input",
       message: "What is your email?",
       name: "email",
+      validate: emailValidator
     },
     {
       type: "input",
       message: "What is your office number?",
       name: "officeNumber",
+      validate: numValidator
     },
   ]);
 }
@@ -116,7 +149,7 @@ function buildEmployee() {
                   employeesArr.push(engineer); // push that new employee object into the employeesArr for later concatenation
                   console.log(
                     `Success! Engineer ${answers.name} information saved.`
-                  )
+                  );
                   buildEmployee(); // call the buildEmployee function again
                 });
             }
@@ -139,7 +172,7 @@ function buildEmployee() {
                   employeesArr.push(intern); // push that new employee object into the employeesArr for later concatenation
                   console.log(
                     `Success! Intern ${answers.name} information saved.`
-                  )
+                  );
                   buildEmployee(); // call the buildEmployee function again
                 });
             }
@@ -149,7 +182,7 @@ function buildEmployee() {
         // RENDER HTML
         // ****************************
         renderFile();
-        console.log("HTML page rendered.")
+        console.log("HTML page rendered.");
       }
     });
 }
