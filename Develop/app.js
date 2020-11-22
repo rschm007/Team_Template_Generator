@@ -117,7 +117,6 @@ function buildEmployee() {
                   console.log(
                     `Success! Engineer ${answers.name} information saved.`
                   )
-                  console.log(`current team:  ${JSON.stringify(employeesArr)}`)
                   buildEmployee(); // call the buildEmployee function again
                 });
             }
@@ -141,7 +140,6 @@ function buildEmployee() {
                   console.log(
                     `Success! Intern ${answers.name} information saved.`
                   )
-                  console.log(`current team:  ${JSON.stringify(employeesArr)}`)
                   buildEmployee(); // call the buildEmployee function again
                 });
             }
@@ -151,6 +149,7 @@ function buildEmployee() {
         // RENDER HTML
         // ****************************
         renderFile();
+        console.log("HTML page rendered.")
       }
     });
 }
@@ -173,7 +172,6 @@ initialize().then((answers) => {
   );
   employeesArr.push(manager); // push that new employee object into the employeesArr for later concatenation
   console.log(`Success! Manager ${answers.name} information saved.`);
-  console.log(`current team:  ${JSON.stringify(employeesArr)}`)
   console.log(`Beginning employee data entry...`);
   buildEmployee();
 });
