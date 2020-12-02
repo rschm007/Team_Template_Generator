@@ -39,7 +39,7 @@ For installation you will need to use node.js to type npm install in your CLI. T
 To initialize the app, open your terminal in the project's root directory and type "node app.js". The app will then use the inquirer package to walk you through a series of prompts. Once you are satisfied with your team build, the app will generate your custom HTML file in the "output" directory
 <img src="https://raw.githubusercontent.com/rschm007/Team_Template_Generator/main/Develop/Assets/imgs/demo_1.gif" alt="Team Template Generator Demo Image" style="max-width:100%;">
 
-# Contributing
+# Contribute
 
 If you would like to contribute please DM me or make a fork request.
 
@@ -49,7 +49,7 @@ If you would like to contribute please DM me or make a fork request.
 To test this app type "npm test" in your CLI. This app uses the Jest framework for testing.
 
 
-# Acknowledgements
+# Credits
 
 UCI Full Stack Flex Bootcamp for providing code references and the challenge prompt.
 
