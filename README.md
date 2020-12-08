@@ -9,7 +9,7 @@ Check out the badges hosted by [shields.io](https://shields.io/).
 
 Repository <a href="https://github.com/rschm007/Team_Template_Generator">https://github.com/rschm007/Team_Template_Generator</a>
 
-Example Team Page: <a href="https://rschm007.github.io/Team_Template_Generator/Develop/output/team.html">https://rschm007.github.io/Team_Template_Generator/Develop/output/team.html</a>
+Example Team Page: <a href="https://rschm007.github.io/Team_Template_Generator/output/team.html">https://rschm007.github.io/Team_Template_Generator/output/team.html</a>
 
 
 ## Description
